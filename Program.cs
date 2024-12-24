@@ -10,6 +10,7 @@ namespace Web_siteResume
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddSingleton<Web_siteResume.BL.Auth.IAuthBL, Web_siteResume.BL.Auth.AuthBL>();
+            builder.Services.AddSingleton<Web_siteResume.BL.Auth.IEncrypt, Web_siteResume.BL.Auth.Encrypt>();
             builder.Services.AddSingleton<Web_siteResume.DAL.IAuthDAL, Web_siteResume.DAL.AuthDAL>();
 
             var app = builder.Build();
