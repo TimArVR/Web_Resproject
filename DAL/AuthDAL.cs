@@ -26,7 +26,7 @@ namespace Web_siteResume.DAL
                 return await connection.QueryFirstOrDefaultAsync<UserModel>(@"
                         select UserId, Email, Password, Salt, Status 
                         from AppUser 
-                        where UserId =@id", new { id=id }) ?? new UserModel();
+                        where UserId =@id", new { id = id }) ?? new UserModel();
             }
 
         }
@@ -37,8 +37,9 @@ namespace Web_siteResume.DAL
             {
                 connection.Open();
                 string sql = @"INSERT INTO AppUser(Email, Password, Salt, Status)
-                            VALUES(@Email, @Password, @Salt, @Status)";
-                return await connection.ExecuteAsync(sql, model);
+                            VALUES(@Email, @Password, @Salt, @Status);
+                            SELECT currval(pg_get_serial_sequence('AppUser','userid'));";
+                return await connection.QuerySingleAsync<int>(sql, model);
             }
         }
     }

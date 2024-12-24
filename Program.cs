@@ -11,8 +11,14 @@ namespace Web_siteResume
 
             builder.Services.AddSingleton<Web_siteResume.BL.Auth.IAuthBL, Web_siteResume.BL.Auth.AuthBL>();
             builder.Services.AddSingleton<Web_siteResume.BL.Auth.IEncrypt, Web_siteResume.BL.Auth.Encrypt>();
+            builder.Services.AddScoped<Web_siteResume.BL.Auth.ICurrentUser, Web_siteResume.BL.Auth.CurrentUser>();//добавляем сессию
             builder.Services.AddSingleton<Web_siteResume.DAL.IAuthDAL, Web_siteResume.DAL.AuthDAL>();
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            builder.Services.AddMvc().AddSessionStateTempDataProvider();
+            builder.Services.AddSession();
+            
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,7 +30,9 @@ namespace Web_siteResume
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 
