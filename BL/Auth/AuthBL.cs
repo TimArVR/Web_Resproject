@@ -31,5 +31,17 @@ namespace Web_siteResume.BL.Auth
             httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME, id);//добавляем сессии
         }
 
+        public async Task<int> Authenticate(string email, string password, bool rememberMe) 
+        {
+            var user = await authDAL.GetUser(email);
+            if (user.Password == encrypt.HashPassword(password, user.Salt)) //если введенный пароль и сохраненная соль (!) совпадает, то авторизуем
+            {
+                Login(user.UserId ?? 0);
+                return user.UserId ?? 0;
+            }
+            throw new Exception("Not implemented");
+        }
+
+
     }
 }

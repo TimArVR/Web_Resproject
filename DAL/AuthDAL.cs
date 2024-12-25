@@ -10,7 +10,7 @@ namespace Web_siteResume.DAL
         {
             using (var connection = new NpgsqlConnection(DbHelper.connString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 return await connection.QueryFirstOrDefaultAsync<UserModel>(@"
                         select UserId, Email, Password, Salt, Status 
                         from AppUser 
@@ -22,7 +22,7 @@ namespace Web_siteResume.DAL
         {
             using (var connection = new NpgsqlConnection(DbHelper.connString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 return await connection.QueryFirstOrDefaultAsync<UserModel>(@"
                         select UserId, Email, Password, Salt, Status 
                         from AppUser 
@@ -35,7 +35,7 @@ namespace Web_siteResume.DAL
         {
             using (var connection = new NpgsqlConnection(DbHelper.connString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 string sql = @"INSERT INTO AppUser(Email, Password, Salt, Status)
                             VALUES(@Email, @Password, @Salt, @Status);
                             SELECT currval(pg_get_serial_sequence('AppUser','userid'));";
