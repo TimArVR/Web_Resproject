@@ -1,6 +1,7 @@
 ﻿using Web_siteResume.DAL.Models;
 using Web_siteResume.DAL;
 using System.ComponentModel.DataAnnotations;
+using Web_siteResume.BL;
 
 namespace Web_siteResume.BL.Auth
 {
@@ -35,12 +36,13 @@ namespace Web_siteResume.BL.Auth
         public async Task<int> Authenticate(string email, string password, bool rememberMe) 
         {
             var user = await authDAL.GetUser(email);
-            if (user.Password == encrypt.HashPassword(password, user.Salt)) //если введенный пароль и сохраненная соль (!) совпадает, то авторизуем
+
+            if (user.UserId != null && user.Password == encrypt.HashPassword(password, user.Salt)) //если введенный пароль и сохраненная соль (!) совпадает, то авторизуем
             {
                 Login(user.UserId ?? 0);
                 return user.UserId ?? 0;
             }
-            throw new Exception("Not implemented");
+            throw new AuthorizationException();
         }
 
         //Здесь добавим валидацию Бизнес уровня, а не на уровне контроллера

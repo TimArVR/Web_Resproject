@@ -37,8 +37,7 @@ namespace Web_siteResume.DAL
             {
                 await connection.OpenAsync();
                 string sql = @"INSERT INTO AppUser(Email, Password, Salt, Status)
-                            VALUES(@Email, @Password, @Salt, @Status);
-                            SELECT currval(pg_get_serial_sequence('AppUser','userid'));";
+                            VALUES(@Email, @Password, @Salt, @Status) returning UserId";
                 return await connection.QuerySingleAsync<int>(sql, model);
             }
         }

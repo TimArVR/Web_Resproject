@@ -9,6 +9,7 @@
 		<p>
 			<label>Email</label>
 			<input name="Email" type="text" value="@Model.Email" />
+			<div class="error">@Html.ValidationMessageFor(m => m.Email)</div>
 		</p>
 		<p>
 			<label>Пароль</label>
