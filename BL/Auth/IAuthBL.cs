@@ -1,4 +1,5 @@
-﻿using Web_siteResume.DAL.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using Web_siteResume.DAL.Models;
 
 namespace Web_siteResume.BL.Auth
 {
@@ -6,5 +7,8 @@ namespace Web_siteResume.BL.Auth
     {
         Task<int> CreateUser(Web_siteResume.DAL.Models.UserModel user);
         Task<int> Authenticate(string email, string password, bool rememberMe);
+
+        Task<ValidationResult?> ValidateEmail(string email);
+
     }
 }

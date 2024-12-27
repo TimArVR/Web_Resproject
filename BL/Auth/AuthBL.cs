@@ -1,5 +1,6 @@
 ﻿using Web_siteResume.DAL.Models;
 using Web_siteResume.DAL;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web_siteResume.BL.Auth
 {
@@ -42,6 +43,19 @@ namespace Web_siteResume.BL.Auth
             throw new Exception("Not implemented");
         }
 
+        //Здесь добавим валидацию Бизнес уровня, а не на уровне контроллера
+        //Чтобы можно было потом и из мобильного приложения и из API вызвать ее и не переписывать
+        //Проверим на дубликаты в Базе данных
 
+        public async Task<ValidationResult?> ValidateEmail(string email)
+        {
+            var user = await authDAL.GetUser(email);
+            if (user.UserId != null) 
+            {
+                return new ValidationResult("Email уже существует");
+            }
+            return null;
+        
+        }
     }
 }
