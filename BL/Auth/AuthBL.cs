@@ -10,27 +10,31 @@ namespace Web_siteResume.BL.Auth
         private readonly IAuthDAL authDAL;
         private readonly IEncrypt encrypt;
         private readonly IHttpContextAccessor httpContextAccessor;//добавляем сессии
+        private readonly IDbSession dbSession;//добавили кастомные сессии
 
         public AuthBL(IAuthDAL authDAL, 
             IEncrypt encrypt,
-            IHttpContextAccessor httpContextAccessor)//добавляем сессии
+            IHttpContextAccessor httpContextAccessor, //добавляем сессии
+            IDbSession dbSession) //добавили кастомные сессии
         {
             this.httpContextAccessor = httpContextAccessor;
             this.authDAL = authDAL;
             this.encrypt = encrypt;
+            this.dbSession = dbSession;
         }
         public async Task<int> CreateUser(UserModel user)
         {
             user.Salt = Guid.NewGuid().ToString();
             user.Password = encrypt.HashPassword(user.Password, user.Salt);
             int id = await authDAL.CreateUser(user);
-            Login(id);
+            await Login(id);
             return id;
         }
 
-        public void Login(int id)
+        public async Task Login(int id)
         {
-            httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME, id);//добавляем сессии
+            //httpContextAccessor.HttpContext?.Session.SetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME, id);//добавляем сессии
+            await dbSession.SetUserId(id);
         }
 
         public async Task<int> Authenticate(string email, string password, bool rememberMe) 
@@ -39,7 +43,7 @@ namespace Web_siteResume.BL.Auth
 
             if (user.UserId != null && user.Password == encrypt.HashPassword(password, user.Salt)) //если введенный пароль и сохраненная соль (!) совпадает, то авторизуем
             {
-                Login(user.UserId ?? 0);
+                await Login(user.UserId ?? 0);
                 return user.UserId ?? 0;
             }
             throw new AuthorizationException();

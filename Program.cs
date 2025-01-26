@@ -9,14 +9,17 @@ namespace Web_siteResume
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddSingleton<Web_siteResume.BL.Auth.IAuthBL, Web_siteResume.BL.Auth.AuthBL>();
+            builder.Services.AddScoped<Web_siteResume.BL.Auth.IAuthBL, Web_siteResume.BL.Auth.AuthBL>();
             builder.Services.AddSingleton<Web_siteResume.BL.Auth.IEncrypt, Web_siteResume.BL.Auth.Encrypt>();
-            builder.Services.AddScoped<Web_siteResume.BL.Auth.ICurrentUser, Web_siteResume.BL.Auth.CurrentUser>();//добавляем сессию
+            builder.Services.AddScoped<Web_siteResume.BL.Auth.ICurrentUser, Web_siteResume.BL.Auth.CurrentUser>();//добавляем для сессии
             builder.Services.AddSingleton<Web_siteResume.DAL.IAuthDAL, Web_siteResume.DAL.AuthDAL>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddSingleton<Web_siteResume.DAL.IDbSessionDAL, Web_siteResume.DAL.DbSessionDAL>();
+            builder.Services.AddScoped<Web_siteResume.BL.Auth.IDbSession, Web_siteResume.BL.Auth.DbSession>();//добавляем DI кастомных сессий сессию
 
-            builder.Services.AddMvc().AddSessionStateTempDataProvider();
-            builder.Services.AddSession();
+
+            builder.Services.AddMvc()/*.AddSessionStateTempDataProvider()*/;
+            //builder.Services.AddSession();
             
             
             var app = builder.Build();
@@ -32,7 +35,7 @@ namespace Web_siteResume
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseSession();
+            //app.UseSession();
 
             app.UseAuthorization();
 
