@@ -9,7 +9,7 @@ namespace Web_siteResume
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped<Web_siteResume.BL.Auth.IAuthBL, Web_siteResume.BL.Auth.AuthBL>();
+            builder.Services.AddScoped<Web_siteResume.BL.Auth.IAuth, Web_siteResume.BL.Auth.Auth>();
             builder.Services.AddSingleton<Web_siteResume.BL.Auth.IEncrypt, Web_siteResume.BL.Auth.Encrypt>();
             builder.Services.AddScoped<Web_siteResume.BL.Auth.ICurrentUser, Web_siteResume.BL.Auth.CurrentUser>();//добавляем для сессии
             builder.Services.AddSingleton<Web_siteResume.DAL.IAuthDAL, Web_siteResume.DAL.AuthDAL>();

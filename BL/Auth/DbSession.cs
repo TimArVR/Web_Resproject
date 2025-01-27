@@ -37,7 +37,7 @@ namespace Web_siteResume.BL.Auth
                 Created = DateTime.Now,
                 LastAccessed = DateTime.Now
             };
-            await sessionDAL.CreateSession(data);
+            await sessionDAL.Create(data);
             return data;
 
         }
@@ -54,7 +54,7 @@ namespace Web_siteResume.BL.Auth
             else
                 sessionId = Guid.NewGuid();
 
-            var data = await this.sessionDAL.GetSession(sessionId);
+            var data = await this.sessionDAL.Get(sessionId);
             if (data == null)
             {
                 data = await this.CreateSession();
@@ -70,7 +70,7 @@ namespace Web_siteResume.BL.Auth
             data.UserId = userId;
             data.DbSessionId = Guid.NewGuid();
             CreateSessionCookie(data.DbSessionId);
-            return await sessionDAL.CreateSession(data);
+            return await sessionDAL.Create(data);
         }
         public async Task<int?> GetUserId()
         {
@@ -84,6 +84,10 @@ namespace Web_siteResume.BL.Auth
             return data.UserId != null;
         }
 
-
+        public async Task Lock()
+        {
+            var data = await this.GetSession();
+            await sessionDAL.Lock(data.DbSessionId);
+        }
     }
 }

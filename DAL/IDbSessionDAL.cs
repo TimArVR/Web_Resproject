@@ -3,8 +3,9 @@ namespace Web_siteResume.DAL
 {
     public interface IDbSessionDAL
     {
-        Task<SessionModel?> GetSession(Guid sessionId);
-        Task<int> UpdateSession(SessionModel model);
-        Task<int> CreateSession(SessionModel model);
+        Task<SessionModel?> Get(Guid sessionId);
+        Task<int> Update(SessionModel model);
+        Task<int> Create(SessionModel model);
+        Task Lock(Guid sessionId);
     }
 }

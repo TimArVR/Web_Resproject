@@ -3,12 +3,14 @@ using Web_siteResume.DAL.Models;
 
 namespace Web_siteResume.BL.Auth
 {
-    public interface IAuthBL
+    public interface IAuth
     {
         Task<int> CreateUser(Web_siteResume.DAL.Models.UserModel user);
         Task<int> Authenticate(string email, string password, bool rememberMe);
 
-        Task<ValidationResult?> ValidateEmail(string email);
+        Task ValidateEmail(string email);
+
+        Task Register(UserModel user);
 
     }
 }

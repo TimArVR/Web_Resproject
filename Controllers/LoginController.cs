@@ -8,8 +8,8 @@ namespace Web_siteResume.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly IAuthBL authBL;
-        public LoginController(IAuthBL authBL)
+        private readonly IAuth authBL;
+        public LoginController(IAuth authBL)
         {
             this.authBL = authBL;
         }

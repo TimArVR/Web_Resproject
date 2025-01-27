@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using Web_siteResume.BL.Auth;
+using Web_siteResume.BL.Exeption;
 using Web_siteResume.ViewMapper;
 using Web_siteResume.ViewModels;
 
@@ -8,8 +9,8 @@ namespace Web_siteResume.Controllers
 {
     public class RegisterController : Controller
     {
-        private readonly IAuthBL authBL;
-        public RegisterController(IAuthBL authBL)
+        private readonly IAuth authBL;
+        public RegisterController(IAuth authBL)
         {
             this.authBL = authBL;
         }
@@ -26,18 +27,15 @@ namespace Web_siteResume.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Валидация сделана на BL уровне, тут ее проверяем на уровне модели
-                var errorModel = await authBL.ValidateEmail(model.Email ?? "");
-                if (errorModel != null)
+                try
                 {
-                    ModelState.TryAddModelError("Email", errorModel.ErrorMessage!);
+                    await authBL.Register(AuthMapper.MapRegisterViewModelToUserModel(model));
+                    return Redirect("/");
                 }
-            }
-
-            if (ModelState.IsValid)
-            {
-                await authBL.CreateUser(AuthMapper.MapRegisterViewModelToUserModel(model));
-                return Redirect("/");
+                catch (DuplicateEmailException) 
+                {
+                    ModelState.TryAddModelError("Email", "Email уже существует");
+                }
             }
             return View("Index", model);
         }
